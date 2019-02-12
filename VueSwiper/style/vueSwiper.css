@@ -1,0 +1,147 @@
+*{font-family: '微软雅黑','黑体'}
+ul,ol{list-style: none;}
+.vueswiper{
+	position: relative;
+	user-select: none;
+	-webkit-user-select:none;
+	-o-user-select:none;
+	-moz-user-select:none;
+}
+.vueswiperArrow{
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 10%;
+	max-width: 80px;
+	z-index: 500;
+	color: #fff;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	transition: all 0.3s;
+	}.vueswiperArrowlt{
+		left:0px;
+		top: 0px;
+		background: -webkit-linear-gradient(0deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Safari 5.1 - 6.0 */
+		background: -o-linear-gradient(0deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Opera 11.1 - 12.0 */
+		background: -moz-linear-gradient(0deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Firefox 3.6 - 15 */
+		background: linear-gradient(90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* 标准的语法 */
+	}.vueswiperArrowgt{
+		top: 0px;
+		right:0px;
+		background: -webkit-linear-gradient(0deg,rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Safari 5.1 - 6.0 */
+		background: -o-linear-gradient(0deg,rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Opera 11.1 - 12.0 */
+		background: -moz-linear-gradient(0deg,rgba(0,0,0,0), rgba(0,0,0,0.5)); /* Firefox 3.6 - 15 */
+		background: linear-gradient(90deg,rgba(0,0,0,0), rgba(0,0,0,0.5)); /* 标准的语法 */
+	}.vueswiperArrow:hover{
+		opacity: 1;
+	}
+	/*竖向箭头*/
+	.vueswiperArrowCol{
+		position: absolute;
+		width:100%;
+		height:20%;
+		max-height:50px;
+		cursor: pointer;
+		z-index: 500;
+		opacity: 0;
+		transition: all 0.3s;
+		}.vueswiperArrowColTop{
+			top: 0;
+			left: 0;
+			background: -webkit-linear-gradient(90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Safari 5.1 - 6.0 */
+			background: -o-linear-gradient(90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Opera 11.1 - 12.0 */
+			background: -moz-linear-gradient(90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Firefox 3.6 - 15 */
+			background: linear-gradient(180deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* 标准的语法 */
+		}.vueswiperArrowColBottom{
+			bottom: 0;
+			left: 0;
+			background: -webkit-linear-gradient(-90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Safari 5.1 - 6.0 */
+			background: -o-linear-gradient(-90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Opera 11.1 - 12.0 */
+			background: -moz-linear-gradient(-90deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* Firefox 3.6 - 15 */
+			background: linear-gradient(0deg,rgba(0,0,0,0.5), rgba(0,0,0,0)); /* 标准的语法 */
+		}.vueswiperArrowCol:hover{
+			opacity: 1;
+		}
+/*图片内容*/
+.vueswiperImgCon{
+	position: relative;
+	width: 100%;
+	height:100%;
+	overflow: hidden;
+	}.vueswiperCon{
+		position:absolute;
+		top: 0;
+		height: 100%;
+	}.vueswiperConCol{
+		position: absolute;
+		left: 0;
+		width:100%;
+	}.vueswiperConCol>img{
+		display: block;
+	}
+/*按钮区域*/
+.vueswiperBtn{
+	position: absolute;
+	left: 0px;
+	bottom: 20px;
+	width: 100%;
+	display: flex;
+	justify-content:center;
+	}.vueswiperBtn2{
+		position: absolute;
+		left: 0px;
+		bottom: -20px;
+		width: 100%;
+		display: flex;
+		justify-content:center;
+	}
+	.vueswiperBtnCon{
+		display: flex;
+		align-items: center;
+		}.vueswiperIndex{
+			border-radius: 50%;
+			border:1px solid #000;
+			width: 10px;
+			height: 10px;
+			background-color: transparent;
+			margin: 0 10px;
+			transition: all 0.3s;
+			cursor: pointer;
+		}.vueswiperIndex:hover{
+			background-color: rgba(0,0,0,0.5);
+		}.vueswiperIndexChoose{
+			background-color: #000 !important;
+		}
+	/*竖向按钮*/
+	.vueswiperBtnCol{
+		position: absolute;
+		height:100%;
+		right: 20px;
+		top: 0;
+		display: flex;
+		align-items: center;
+	}.vueswiperBtnCol2{
+		position: absolute;
+		height:100%;
+		right: -20px;
+		top: 0;
+		display: flex;
+		align-items: center;
+		}.vueswiperBtnConCol{
+		display: flex;
+		flex-direction: column;
+		}.vueswiperIndexCol{
+			border-radius: 50%;
+			border:1px solid #000;
+			width: 10px;
+			height: 10px;
+			background-color: transparent;
+			margin: 5px 0;
+			transition: all 0.3s;
+			cursor: pointer;
+		}.vueswiperIndexCol:hover{
+			background-color: rgba(0,0,0,0.5);
+		}

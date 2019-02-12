@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="style/vueSwiper.css">
+	<style type="text/css">
+		body{
+			background-color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" style="display: flex;justify-content: center;">
+		<!-- 
+				img-data:图片路径数组
+		 -->
+		<vueswiper :config=arg></vueswiper>
+	</div>
+</body>
+<script type="text/javascript" src="lib/vue.js"></script>
+<script type="text/javascript">
+	Vue.component('vueswiper',{
+		template:`
+		<div class="vueswiper" :style="{width:config.width,height:config.height}">
+			<div v-if="config.type=='row'" class="vueswiperArrow vueswiperArrowlt" @click="lt">&lt;</div>
+			<div v-if="config.type=='row'" class="vueswiperArrow vueswiperArrowgt" @click="rt">&gt;</div>
+			<div v-if="config.type=='col'" class="vueswiperArrowCol vueswiperArrowColTop" @click="lt"></div>
+			<div v-if="config.type=='col'" class="vueswiperArrowCol vueswiperArrowColBottom" @click="rt"></div>
+			<div class="vueswiperImgCon">
+				<div v-if="config.type=='row'" class="vueswiperCon" :style="{width:config.imgDatas.length*100+'%',left:moveLeft+'%'}">
+					<img v-for="(item,index) in config.imgDatas"
+						:src="item"
+						:alt="item"
+						:style="{width:100/config.imgDatas.length+'%',height:'100%'}"
+						/>
+				</div>
+				<div v-if="config.type=='col'" class="vueswiperConCol" :style="{height:config.imgDatas.length*100+'%',top:moveLeft+'%'}">
+					<img  v-for="(item,index) in config.imgDatas"
+						:src="item"
+						:alt="item"
+						:style="{height:100/config.imgDatas.length+'%',width:'100%'}"
+					/>
+				</div>
+			</div>
+			<div :class="{vueswiperBtn:config.btnLocation=='inside'&&config.type=='row',
+						vueswiperBtn2:config.btnLocation=='outside'&&config.type=='row',
+						vueswiperBtnCol:config.btnLocation=='inside'&&config.type=='col',
+						vueswiperBtnCol2:config.btnLocation=='outside'&&config.type=='col'}">
+				<div :class="{vueswiperBtnCon:config.type=='row',vueswiperBtnConCol:config.type=='col'}">
+					<i v-for="(i,index) in config.imgDatas.length"
+						:class="{vueswiperIndex:config.type=='row',vueswiperIndexCol:config.type=='col',vueswiperIndexChoose:index==btnIndex}"
+						v-show="index>0&&index<config.imgDatas.length-1"
+						@click="chooseImg(index)"
+					></i>
+				</div>
+			</div>
+		</div>`,
+		props:{
+			config:{
+				type:Object,
+				required:true
+			}
+		},
+		data(){
+			return {
+				moveLeft:-100,//向左移动的距离
+				chooseIndex:1,//选中的序号
+				btnIndex:1,//按钮的序号
+				orientation:'',//轮播的方向
+				carouselInterval:null,//轮播计时器
+				autoInterval:null,//自动播放
+			}
+		},
+		methods:{
+			lt(){
+				this.stop();
+				clearInterval(this.carouselInterval);
+				this.chooseIndex<=0?this.chooseIndex=0:this.chooseIndex--;
+				this.chooseIndex==0?this.btnIndex=this.config.imgDatas.length-2:this.btnIndex=this.chooseIndex;
+				this.move();
+			},
+			rt(){
+				this.stop();
+				clearInterval(this.carouselInterval);
+				this.chooseIndex>=this.config.imgDatas.length-1?this.chooseIndex=this.config.imgDatas.length-1:this.chooseIndex++;
+				this.chooseIndex==this.config.imgDatas.length-1?this.btnIndex=1:this.btnIndex=this.chooseIndex;
+				// 移动到了最后一个按钮
+				this.move();
+			},
+			chooseImg(index){
+				if(index!=this.chooseIndex){
+					this.stop();
+					clearInterval(this.carouselInterval);
+					this.chooseIndex=index;
+					this.btnIndex=index;
+					this.move();
+				}
+			},
+			move(){
+				var terminus = 0-this.chooseIndex*100;//最终图片移动到的位置
+				var distanceInterval = (terminus-this.moveLeft)/60
+				var animationInterval=this.config.timeAnimation/60;//60帧是人眼顺畅的感受
+				this.carouselInterval=setInterval(()=>{
+					//向右移动
+					if(distanceInterval<0){
+						//超出终点了
+						if(this.moveLeft+distanceInterval<terminus){
+							this.moveLeft=terminus;
+							clearInterval(this.carouselInterval);
+							this.start();
+							//是不是最后一张
+							if(this.chooseIndex==this.config.imgDatas.length-1){
+								//最后一张图,移动完成后要处理图片的位置
+								this.moveLeft=-100;
+								this.chooseIndex=1;
+							}
+						}else{
+							this.moveLeft+=distanceInterval;
+						}
+					}
+					//向左移动
+					else{
+						//超出终点了
+						if(this.moveLeft+distanceInterval>terminus){
+							this.moveLeft=terminus;
+							clearInterval(this.carouselInterval);
+							this.start();
+							//是不是第一张
+							if(this.chooseIndex==0){
+								this.moveLeft=0-(this.config.imgDatas.length-2)*100;
+								this.chooseIndex=this.config.imgDatas.length-2;
+							}
+						}else{
+							this.moveLeft+=distanceInterval;
+						}
+					}
+				},animationInterval)
+			},
+			start(){
+				if(this.config.auto){
+					this.autoInterval=setInterval(()=>{
+						this.rt();
+					},this.config.timeInterval);
+				}
+			},
+			stop(){
+				if(this.config.auto){
+					clearInterval(this.autoInterval)
+				}
+			}
+		},
+		mounted(){
+			// 参数的配置
+				// 轮播类型
+				if(this.config.type && typeof this.config.type=='string'){
+
+				}else{
+					this.config.type='row';
+				}
+				// 图片资源
+				if(this.config.imgDatas && typeof this.config.imgDatas=='object' && this.config.imgDatas.length>0){
+						//原来的图片上加第一张图为初始图片的最后一张，原来的图片上加最后一张图为初始图片的第一张，用于轮播处理
+						var fristImg=this.config.imgDatas[0],
+							lastImg=this.config.imgDatas[this.config.imgDatas.length-1];
+						this.config.imgDatas.push(fristImg);
+						this.config.imgDatas.unshift(lastImg);
+				}else{
+					this.config.imgDatas=[];
+				}
+				// 框的宽
+				if(this.config.width && typeof this.config.width=='string'){
+
+				}else{
+					this.config.width='500px';
+				}
+				// 框的高
+				if(this.config.height && typeof this.config.height=='string'){
+
+				}else{
+					this.config.height='300px';
+				}
+				// 轮播的间隔时间
+				if(this.config.timeInterval && typeof this.config.timeInterval=='number'){
+
+				}else{
+					this.config.timeInterval=2000;
+				}
+				// 轮播的动画时间
+				if(this.config.timeAnimation && typeof this.config.timeAnimation=='number'){
+
+				}else{
+					this.config.timeAnimation=1000;
+				}
+				//是否自动播放
+				if(typeof this.config.auto=='boolean'){
+
+				}else{
+					this.config.auto=true;
+				}
+				//按钮的位置
+				if(this.config.btnLocation && typeof this.config.btnLocation=='string'){
+
+				}else{
+					this.config.btnLocation='inside';
+				}
+			//自动播放
+			this.start();
+		}
+	})
+
+	var vm = new Vue({
+		el:"#app",
+		data:{
+			arg:{
+				type:'col',
+				imgDatas:[
+					'img/swiper1.jpg',
+					'img/swiper2.jpg',
+					'img/swiper3.jpg',
+					'img/swiper4.jpg'
+				],
+				width:"100%",
+				height:'500px',
+				auto:true,
+				btnLocation:'inside',
+			}
+		}
+	})
+</script>
+</html>
+
